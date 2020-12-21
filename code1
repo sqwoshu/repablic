@@ -21,7 +21,10 @@ def login(username, password):
         password_input.send_keys(password)
 
         password_input.send_keys(Keys.ENTER)
-        time.sleep(10)
+        time.sleep(5)
+        
+        browser.get('https://bosslike.ru/tasks/telegram/all/')
+        time.sleep(random.randrange(3, 5))
 
         browser.close()
         browser.quit()
