@@ -33,11 +33,11 @@ class VKBot():
 
         log_vk = browser.find_element_by_xpath('//*[@id="loginForm"]/div/div[1]/div/label')
         pas_vk = browser.find_element_by_xpath('//*[@id="loginForm"]/div/div[2]/div/label')
-        log_vk.send_keys(' ')
+        log_vk.send_keys('sdsqwosh')
 
         time.sleep(2)
 
-        pas_vk.send_keys(' ')
+        pas_vk.send_keys('gty56gty')
         time.sleep(1)
 
         pass_vk = browser.find_element_by_xpath('//*[@id="loginForm"]/div/div[3]/button')
@@ -45,6 +45,7 @@ class VKBot():
         time.sleep(2)
 
     def like_vk(self):
+    
         like_vk = self.browser.find_element_by_css_selector('.btn-sm')
         like_vk.click()
 
@@ -57,10 +58,12 @@ class VKBot():
         self.browser.close()
 
     def auto_like_vk(self):
+    
         time.sleep(2)
         self.browser.get('https://bosslike.ru/tasks/instagram/subscribe/')
         window_before = self.browser.window_handles[0]
-        while True:
+        
+        for i in range(25):
             time.sleep(1)
             try:
                 self.like_vk()
