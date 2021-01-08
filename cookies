@@ -1,0 +1,29 @@
+from selenium import webdriver
+import time
+import pickle
+
+browser = webdriver.Chrome('C:\\Users\\123\\PycharmProjects\\untitled\\venv\\chromedriver\\chromedriver.exe')
+
+#загружаем кукки на наш ноут(пк):
+browser.get('https://bosslike.ru/login/')
+time.sleep(20)
+pickle.dump(browser.get_cookies(),open('sessin_bl','wb'))
+
+browser.get('https://www.instagram.com/')
+time.sleep(20)
+pickle.dump(browser.get_cookies(),open('sessin_in','wb'))
+
+
+
+
+
+#вход:
+browser.get('https://bosslike.ru/login/')
+for cookie in pickle.load(open('session_bl', 'rb')):
+    browser.add_cookie(cookie)
+browser.refresh()
+
+browser.get('https://www.instagram.com/')
+for cookie in pickle.load(open('session_in', 'rb')):
+    browser.add_cookie(cookie)
+browser.refresh()
