@@ -6,18 +6,18 @@ import random
 
 class FacebookBot():
     def __init__(self):
-        self.browser = webdriver.Chrome('C:\\Users\\123\\PycharmProjects\\untitled\\venv\\chromedriver\\chromedriver.exe')
+        self.browser = webdriver.Chrome('C:\\Users\\1\\PycharmProjects\\pythonProject2\\botbosslike\\chromedriver\\chromedriver.exe')
 
     def login(self):
         browser = self.browser
 
         browser.get('https://bosslike.ru/login/')
-        for cookie in pickle.load(open('session_bl', 'rb')):
+        for cookie in pickle.load(open('session_bosslike', 'rb')):
             browser.add_cookie(cookie)
         browser.refresh()
 
         browser.get('https://ru-ru.facebook.com/')
-        for cookie in pickle.load(open('session_fbook', 'rb')):
+        for cookie in pickle.load(open('session_facebook', 'rb')):
             browser.add_cookie(cookie)
         browser.refresh()
 
@@ -25,42 +25,60 @@ class FacebookBot():
         browser = self.browser
 
         time.sleep(3)
-        browser.get('https://bosslike.ru/tasks/fb/subscribe/')
+        browser.get('https://bosslike.ru/tasks/fb/like/')
         window_before = browser.window_handles[0]
 
-        while True:
-            time.sleep(2)
+        for i in range(18):
+            time.sleep(5)
             try:
                 self.transition_fb()
+                browser.switch_to.window(window_before)
+                time.sleep(2)
+                browser.find_element_by_css_selector('.check-task').click()
+                time.sleep(random.randrange(10, 15))
 
             except Exception:
-                browser.switch_to.window(window_before)
-                self.skip_fb()
+                try:
+                    browser.switch_to.window(window_before)
+                    time.sleep(3)
 
+                    browser.find_element_by_css_selector('.check-task').click()
+                    time.sleep(random.randrange(10, 15))
+
+                    self.transition_fb()
+                except Exception:
+                    browser.switch_to.window(window_before)
+                    browser.refresh()
 
     def transition_fb(self):
         browser = self.browser
         window_before = browser.window_handles[0]
 
         browser.find_element_by_css_selector('.btn-sm').click()
-
         window_after = browser.window_handles[1]
         browser.switch_to.window(window_after)
 
-        time.sleep(random.randrange(20, 25))
+        time.sleep(random.randrange(15, 20))
 
+        try:
+            clik_prow = browser.find_element_by_css_selector('._77la')
 
-        browser.find_element_by_xpath('//*[@id="mount_0_0"]/div/div[1]/div[1]/div[3]/div/div/div[1]/div[1]/div[3]/div/div/div/div[2]/div/div/div[4]/div').click()
-        time.sleep(5)
+            if clik_prow.is_enabled():
+                browser.switch_to.window(window_after)
 
-        browser.find_element_by_xpath('//*[@id="mount_0_0"]/div/div[1]/div[1]/div[3]/div/div/div[2]/div/div/div[1]/div[1]/div/div/div[1]/div/div[1]/div/div[1]').click()
-        time.sleep(2)
+                time.sleep(2)
+                browser.close()
 
-        browser.close()
+                browser.switch_to.window(window_before)
+                browser.find_element_by_css_selector('.check-task').click()
+                time.sleep(5)
 
-        browser.switch_to.window(window_before)
-        browser.find_element_by_css_selector('.check-task').click()
+        except Exception:
+            browser.switch_to.window(window_after)
+            browser.find_element_by_css_selector('._15ko').click()
 
+            time.sleep(3)
+            browser.close()
 
     def skip_fb(self):
         time.sleep(random.randrange(1, 2))
@@ -71,10 +89,6 @@ class FacebookBot():
 
         skip_2 = self.browser.find_element_by_css_selector('.delete')
         skip_2.click()
-
-        self.browser.refresh()
-
-
 
 bot = FacebookBot()
 bot.login()
