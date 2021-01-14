@@ -1,0 +1,75 @@
+from selenium import webdriver
+from random import randint
+import pickle
+import time
+import random
+
+
+class VkBot():
+    def __init__(self):
+        self.browser = webdriver.Chrome('C:\\Users\\9\\PycharmProjects\\Bot_Rabo4ii\\chrmedriver\\chromedriver.exe')
+
+    def login(self):
+        browser = self.browser
+
+        browser.get('https://vk.com/')
+        for cookie in pickle.load(open('session_vkcom', 'rb')):
+            browser.add_cookie(cookie)
+        browser.refresh()
+
+    def pere(self):
+        browser = self.browser
+        browser.get('https://vk.com/im?sel=-125438636')
+
+        self.bonus()
+
+        while True:
+            # Dice == 0 Фортуна == 1
+            if randint(0,1) == 0:
+                time.sleep(2)
+                browser.find_element_by_xpath('//*[@id="_im_keyboard_container"]/div/div/div[1]/div[1]/div/div[1]/div/div[1]/div[2]/button/span').click()
+                #меньше ==  2 больше 3
+                if randint(2,3) == 2:
+                    time.sleep(2)
+                    browser.find_element_by_xpath('//*[@id="_im_keyboard_container"]/div/div/div[1]/div[1]/div/div[1]/div/div[1]/div[1]/button/span').click()
+
+                    time.sleep(5)
+                    browser.find_element_by_xpath('//*[@id="_im_keyboard_container"]/div/div/div[1]/div[1]/div/div[1]/div/div[3]/div/button').click()
+                    time.sleep(random.randrange(3600,3700))
+
+                    self.bonus()
+                else:
+                    time.sleep(3)
+                    browser.find_element_by_xpath('//*[@id="_im_keyboard_container"]/div/div/div[1]/div[1]/div/div[1]/div/div[1]/div[2]/button').click()
+
+                    time.sleep(5)
+                    browser.find_element_by_xpath('//*[@id="_im_keyboard_container"]/div/div/div[1]/div[1]/div/div[1]/div/div[3]/div/button').click()
+                    time.sleep(random.randrange(3600, 3700))
+                    self.bonus()
+            else:
+                time.sleep(3)
+                browser.find_element_by_xpath('//*[@id="_im_keyboard_container"]/div/div/div[1]/div[1]/div/div[1]/div/div[1]/div[3]/button').click()
+
+                time.sleep(3)
+                browser.find_element_by_xpath('//*[@id="_im_keyboard_container"]/div/div/div[1]/div[1]/div/div[1]/div/div[1]/div/button').click()
+
+                time.sleep(5)
+                browser.find_element_by_xpath('//*[@id="_im_keyboard_container"]/div/div/div[1]/div[1]/div/div[1]/div/div[3]/div/button').click()
+                time.sleep(random.randrange(3600, 3700))
+
+                self.bonus()
+
+    def bonus(self):
+        browser = self.browser
+        time.sleep(5)
+        browser.find_element_by_xpath('//*[@id="_im_keyboard_container"]/div/div/div[1]/div[1]/div/div[1]/div/div/div/button').click()
+
+        time.sleep(3)
+        browser.find_element_by_xpath('//*[@id="_im_keyboard_container"]/div/div/div[1]/div[1]/div/div[1]/div/div[2]/div[1]/button').click()
+
+        time.sleep(5)
+        browser.find_element_by_xpath('//*[@id="_im_keyboard_container"]/div/div/div[1]/div[1]/div/div[1]/div/div/div/button').click()
+
+bot = VkBot()
+bot.login()
+bot.pere()
