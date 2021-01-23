@@ -9,7 +9,7 @@ class TelegramBot():
     def __init__(self):
         self.browser = webdriver.Chrome('C:\\Users\\9\\PycharmProjects\\Bot_Rabo4ii\\chrmedriver\\chromedriver.exe')
 
-    def login(self):
+    def login_teleg(self):
         browser = self.browser
 
         browser.get('https://bosslike.ru/login/')
@@ -21,40 +21,39 @@ class TelegramBot():
         browser.get('https://bosslike.ru/tasks/telegram/all/')
         time.sleep(3)
 
-    def like(self):
+    def follow_teleg(self):
+        browser = self.browser
         time.sleep(2)
-        like_btn = self.browser.find_element_by_css_selector('.btn-sm')
-        like_btn.click()
+        browser.find_element_by_css_selector('.btn-sm').click()
 
-    def auto_like(self):
+    def auto_follow_teleg(self):
         while True:
             time.sleep(1.5)
             try:
-                self.like()
+                self.follow_teleg()
             except Exception:
                 try:
-                    self.propysk_mo()
+                    self.propysk_teleg()
                 except Exception:
-                    self.task_mo()
+                    self.task_teleg()
 
-    def propysk_mo(self):
+    def propysk_teleg(self):
+        browser = self.browser
         time.sleep(random.randrange(2, 2.5))
 
-        skip_1 = self.browser.find_element_by_css_selector('.btn-muted-light ')
-        skip_1.click()
+        browser.find_element_by_css_selector('.btn-muted-light').click()
         time.sleep(1)
 
-        skip_2 = self.browser.find_element_by_css_selector('.delete')
-        skip_2.click()
+        browser.find_element_by_css_selector('.delete').click()
 
-    def task_mo(self):
+    def task_teleg(self):
+        browser = self.browser
         time.sleep(1.5)
 
-        more = self.browser.find_element_by_id('task_more')
-        more.click()
+        browser.find_element_by_id('task_more').click()
         time.sleep(random.randrange(1, 3))
 
-        action = ActionChains(self.browser)
+        action = ActionChains(browser)
         for _ in range(100):
             action.send_keys(Keys.ARROW_UP)
             time.sleep(1)
@@ -63,5 +62,5 @@ class TelegramBot():
         time.sleep(random.randrange(300,600))
 
 bot = TelegramBot()
-bot.login()
-bot.auto_like()
+bot.login_teleg()
+bot.auto_follow_teleg()
