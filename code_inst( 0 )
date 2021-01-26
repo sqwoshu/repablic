@@ -8,7 +8,7 @@ import time
 
 class INSTBot():
     def __init__(self):
-        self.browser = webdriver.Chrome('C:\\Users\\123\\PycharmProjects\\untitled\\venv\\chromedriver\\chromedriver.exe')
+        self.browser = webdriver.Chrome('          ')
 
     def login_in(self):
         browser = self.browser
