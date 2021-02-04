@@ -2,8 +2,14 @@ from selenium import webdriver
 import time
 
 
-options = webdriver.ChromeOptions()
+options = webdriver.ChromeМOptions()
+
+#ноут
 options.add_argument('user-agend=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36')
+
+#ПК
+options.add_argument('user=agend=Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.146 Safari/537.36')
+
 options.add_argument("--disable-blink-features=AutomationControlled")
 driver = webdriver.Chrome(
     executable_path="C:\\Users\\9\\PycharmProjects\\Bot_Rabo4ii\\chrmedriver\\chromedriver.exe",options=options)
