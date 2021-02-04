@@ -1,0 +1,16 @@
+try:
+   if :
+   else:
+   # не будет выполняться
+   
+except Exception:
+#обработка всех исключений
+
+except NoSuchElementException:
+# если в блоке try не найден элемент
+
+else:
+#если блок try выполнен
+
+finali:
+#данный блок выполняется всегда
