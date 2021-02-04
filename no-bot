@@ -11,14 +11,15 @@ options.add_argument('user-agend=Mozilla/5.0 (Windows NT 10.0; Win64; x64) Apple
 options.add_argument('user=agend=Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.146 Safari/537.36')
 
 options.add_argument("--disable-blink-features=AutomationControlled")
-driver = webdriver.Chrome(
+self.browser = webdriver.Chrome(
     executable_path="C:\\Users\\9\\PycharmProjects\\Bot_Rabo4ii\\chrmedriver\\chromedriver.exe",options=options)
 
 try:
-    driver.get("https://intoli.com/blog/not-possible-to-block-chrome-headless/chrome-headless-test.html")
+    browser = self.browser
+    browser.get("https://intoli.com/blog/not-possible-to-block-chrome-headless/chrome-headless-test.html")
     time.sleep(10)
 except Exception as ex:
     print(ex)
 finally:
-    driver.close()
-    driver.quit()
+    browser.close()
+    browser.quit()
