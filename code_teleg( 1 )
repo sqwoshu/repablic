@@ -21,8 +21,7 @@ class TelegramBot():
         browser.refresh()
         time.sleep(5)
 
-        browser.get('https://bosslike.ru/tasks/telegram/all/')
-        time.sleep(3)
+        browser.get('https://bosslike.ru/tasks/telegram/subscribe/done17586521/')
 
     def follow_teleg(self):
         browser = self.browser
