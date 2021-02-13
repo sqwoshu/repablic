@@ -1,0 +1,150 @@
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium import webdriver
+import pickle
+import time
+import random
+
+class Bot():
+    def __init__(self):
+        options = webdriver.ChromeOptions()
+        options.add_argument('user=agend=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36')
+
+        options.add_argument("--disable-blink-features=AutomationControlled")
+        self.browser = webdriver.Chrome(
+            executable_path="C:\\Users\\1\\PycharmProjects\\pythonProject2\\botbosslike\\chromedriver\\chromedriver.exe",
+            options=options)
+
+    def login(self):
+        browser = self.browser
+
+        browser.get("https://intoli.com/blog/not-possible-to-block-chrome-headless/chrome-headless-test.html")
+
+        browser.get('https://bosslike.ru/login/')
+        for cookie in pickle.load(open('session_bosslike', 'rb')):
+            browser.add_cookie(cookie)
+        browser.refresh()
+
+        time.sleep(2)
+
+        browser.get('https://www.instagram.com/?hl=ru')
+        for cookie in pickle.load(open('session_in', 'rb')):
+            browser.add_cookie(cookie)
+        browser.refresh()
+
+        browser.get('https://bosslike.ru/tasks/telegram/subscribe/done17586521/')
+
+    def click_teleg(self):
+        browser = self.browser
+        browser.find_element_by_css_selector('.btn-sm').click()
+        try:
+            elem = WebDriverWait(browser, 4).until(EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Задание не выполнено')]")))
+            elem.click()
+
+            browser.find_element_by_css_selector('.btn-muted-light').click()
+            time.sleep(2)
+            browser.find_element_by_css_selector('.delete').click()
+
+            time.sleep(1)
+        except Exception:
+            time.sleep(2)
+            return True
+
+    def auto_subscribe_teleg(self):
+        browser = self.browser
+        for i in range(20):
+            time.sleep(random.randrange(2,3))
+            try:
+                self.click_teleg()
+            except Exception:
+                browser.refresh()
+                time.sleep(10)
+            if i == 19:
+                self.auto_subscribe_in()
+
+    def click_in(self):
+        browser = self.browser
+        browser.find_element_by_css_selector('.btn-sm').click()
+        try:
+            no = WebDriverWait(browser, 2).until(
+                EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Указанного задания не существует')]")))
+            no.click()
+            return True
+        except Exception:
+            return True
+
+    def follow_in(self):
+        browser = self.browser
+        window_after = browser.window_handles[1]
+        browser.switch_to.window(window_after)
+
+        try:
+            sub_in = WebDriverWait(browser, 30).until(EC.presence_of_element_located(
+                (By.XPATH, "//*[contains(text(), 'Подписаться')]")))
+            sub_in.click()
+            time.sleep(3)
+            browser.close()
+        except Exception:
+            browser.close()
+
+    def check_task(self):
+        browser = self.browser
+        browser.find_element_by_css_selector('.check-task').click()
+        time.sleep(2)
+        try:
+            check_in = WebDriverWait(browser, 6).until(
+                EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Задание успешно выполнено')]")))
+            check_in.click()
+        except Exception:
+            try:
+                no_try = WebDriverWait(browser, 4).until(
+                    EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Задание не выполнено')]" or "//*[contains(text(), 'Выполнение не подтверждено, проверьте ещё раз')]" )))
+                no_try.click()
+
+                time.sleep(2)
+                browser.find_element_by_css_selector('.btn-muted-light').click()
+                del_in = WebDriverWait(browser, 2).until(
+                    EC.presence_of_element_located((By.CSS_SELECTOR, '.delete')))
+                del_in.click()
+            except Exception:
+                return True
+
+    def all_problem(self):
+        browser = self.browser
+        try:
+            ost = browser.find_element_by_xpath("//*[contains(text(), 'ОСТАНОВЛЕНО')]")
+            ost.click()
+        except Exception as ex:
+            print(ex)
+            browser.close()
+            browser.quit()
+
+    def auto_subscribe_in(self):
+        browser = self.browser
+        browser.get('https://bosslike.ru/tasks/instagram/subscribe/')
+        window_before = browser.window_handles[0]
+
+        while True:
+            time.sleep(1)
+            try:
+                self.click_in()
+                self.follow_in()
+
+                browser.switch_to.window(window_before)
+                time.sleep(1)
+                self.check_task()
+            except Exception:
+                try:
+                    self.all_problem()
+
+                except Exception as ex:
+                    print(ex)
+                    browser.close()
+                    browser.quit()
+
+bot = Bot()
+bot.login()
+bot.auto_subscribe_teleg()
+
+# Выполнение не подтверждено, проверьте ещё раз
