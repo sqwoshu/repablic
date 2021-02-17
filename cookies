@@ -7,11 +7,11 @@ browser = webdriver.Chrome('C:\\Users\\123\\PycharmProjects\\untitled\\venv\\chr
 #загружаем кукки на наш ноут(пк):
 browser.get('https://bosslike.ru/login/')
 time.sleep(20)
-pickle.dump(browser.get_cookies(),open('sessin_bl','wb'))
+pickle.dump(browser.get_cookies(),open('session_bl','wb'))
 
 browser.get('https://www.instagram.com/')
 time.sleep(20)
-pickle.dump(browser.get_cookies(),open('sessin_in','wb'))
+pickle.dump(browser.get_cookies(),open('session_in','wb'))
 
 
 
