@@ -1,0 +1,129 @@
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium import webdriver
+import pickle
+import time
+import random
+
+
+class FacebookBot():
+    def __init__(self):
+        options = webdriver.ChromeOptions()
+        options.add_argument(
+            'user-agend=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36')
+        options.add_argument("--disable-blink-features=AutomationControlled")
+        self.browser = webdriver.Chrome(
+            executable_path="C:\\Users\\1\\PycharmProjects\\pythonProject2\\botbosslike\\chromedriver\\chromedriver.exe",
+            options=options)
+
+    def login(self):
+        browser = self.browser
+
+        browser.get('https://bosslike.ru/login/')
+        for cookie in pickle.load(open('session_bosslike', 'rb')):
+            browser.add_cookie(cookie)
+        browser.refresh()
+
+        browser.get('https://ru-ru.facebook.com/')
+        for cookie in pickle.load(open('session_facebook', 'rb')):
+            browser.add_cookie(cookie)
+        browser.refresh()
+
+    def auto_like_facebook(self):
+        browser = self.browser
+
+        time.sleep(5)
+        browser.get('https://bosslike.ru/tasks/fb/like/')
+        window_before = browser.window_handles[0]
+
+        for i in range(1,20):
+            time.sleep(1)
+            try:
+                self.click_fb()
+                self.like_fb()
+
+                browser.switch_to.window(window_before)
+                time.sleep(1)
+                self.check_task_fb()
+            except Exception as ex:
+                print(ex)
+                browser.close()
+                browser.quit()
+            if i == 19:
+                self.time_out()
+
+    def click_fb(self):
+        browser = self.browser
+        browser.find_element_by_css_selector('.btn-sm').click()
+        try:
+            no = WebDriverWait(browser, 2).until(
+                EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Указанного задания не существует')]")))
+            no.click()
+            return True
+        except Exception:
+            return True
+
+    def like_fb(self):
+        browser = self.browser
+        window_after = browser.window_handles[1]
+        browser.switch_to.window(window_after)
+        try:
+            WebDriverWait(browser, 10).until(EC.presence_of_element_located(
+                (By.CSS_SELECTOR,'._77la')))
+            browser.close()
+        except Exception:
+            try:
+                like_fb = WebDriverWait(browser, 2).until(EC.presence_of_element_located(
+                    (By.CSS_SELECTOR, '._77li')))
+                like_fb.click()
+                time.sleep(2)
+                browser.close()
+            except Exception:
+                browser.close()
+
+    def check_task_fb(self):
+        browser = self.browser
+        browser.find_element_by_css_selector('.check-task').click()
+        time.sleep(2)
+        try:
+            check_fb = WebDriverWait(browser, 3).until(
+                EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Задание успешно выполнено')]")))
+            check_fb.click()
+        except Exception:
+            try:
+                no_try_fb = WebDriverWait(browser, 2).until(
+                    EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Задание не выполнено')]")))
+                no_try_fb.click()
+
+                time.sleep(2)
+                browser.find_element_by_css_selector('.btn-muted-light').click()
+                del_fb = WebDriverWait(browser, 2).until(
+                    EC.presence_of_element_located((By.CSS_SELECTOR, '.delete')))
+                del_fb.click()
+            except Exception:
+                ele = browser.find_element_by_xpath(
+                    "//*[contains(text(), 'Выполнение не подтверждено, проверьте ещё раз')]")
+                if ele.is_enabled():
+                    ele.click()
+
+                    browser.find_element_by_css_selector('.btn-muted-light').click()
+                    del_fb = WebDriverWait(browser, 2).until(
+                        EC.presence_of_element_located((By.CSS_SELECTOR, '.delete')))
+                    del_fb.click()
+                return True
+
+    def time_out(self):
+        browser = self.browser
+        browser.get('https://google.com/')
+        time.sleep(random.randrange(300,600))
+        self.auto_like_facebook()
+        
+
+bot = FacebookBot()
+bot.login()
+bot.auto_like_facebook()
+
+# _15ko _77li touchable
+# _15ko _77li touchable _77la
+#.check-task
