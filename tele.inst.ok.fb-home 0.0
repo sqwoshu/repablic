@@ -42,6 +42,12 @@ class Bot():
             browser.add_cookie(cookie)
         browser.refresh()
         print('ok')
+        
+        browser.get('https://www.facebook.com/')
+        for cookie in pickle.load(open('session_facebook', 'rb')):
+            browser.add_cookie(cookie)
+        browser.refresh()
+        print('fb')
 
     def click_teleg(self):
         browser = self.browser
