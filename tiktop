@@ -1,0 +1,52 @@
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium import webdriver
+import time
+import pickle
+
+
+options = webdriver.ChromeOptions()
+options.add_argument('user-agend=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36')
+options.add_argument("--disable-blink-features=AutomationControlled")
+browser = webdriver.Chrome(executable_path="C:\\Users\\9\\PycharmProjects\\Bot_Rabo4ii\\chrmedriver\\chromedriver.exe", options=options)
+
+def login():
+    browser.get("https://intoli.com/blog/not-possible-to-block-chrome-headless/chrome-headless-test.html")
+
+    browser.get('https://www.tiktok.com/?lang=ru-RU')
+    for cookie in pickle.load(open('session_tt', 'rb')):
+        browser.add_cookie(cookie)
+    browser.refresh()
+
+    time.sleep(2)
+
+    browser.get('https://tiktop-free.com/')
+    for cookie in pickle.load(open('session_ttfree', 'rb')):
+        browser.add_cookie(cookie)
+    browser.refresh()
+
+def active_bot():
+    task = WebDriverWait(browser, 20).until(
+        EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Заработать')]")))
+    task.click()
+
+    acaunt = WebDriverWait(browser, 20).until(
+        EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Использовать этот аккаунт')]")))
+    acaunt.click()
+
+    time.sleep(30)
+    browser.close()
+    browser.quit()
+
+if __name__ == '__main__':
+    login()
+    active_bot()
+
+# Заработать
+# Выберите аккаунт, который будете использовать для выполнения заданий
+# Использовать этот аккаунт
+# closeIcon_c0c9 закрыть всплывающее сообщение
+# Выполнить
+# Проверить
+# "//*[contains(text(), 'Заработать')]"
