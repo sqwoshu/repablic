@@ -1,0 +1,67 @@
+    def auto_like_in(self):
+        browser = self.browser
+        index_all = self.index_all
+        index_click = self.index_click
+
+        browser.get('https://bosslike.ru/tasks/fb/like/')
+        window_before = browser.window_handles[0]
+
+        time.sleep(2)
+        ballans = browser.find_element(By.ID,'user_points_balance').text
+        print('ballans_open', ballans)
+
+        count = browser.find_element(By.XPATH,'//*[@id="list-2-1"]/span[1]').text
+        if int(count) >= 20:
+            for i in range(20):
+                time.sleep(1)
+                try:
+                    self.click()
+
+                    del index_click[0]
+
+                    self.like_fb()
+
+                    browser.switch_to.window(window_before)
+                    try:
+                        time.sleep(1.5)
+                        browser.find_element(By.XPATH,f'//*[@id="task-item-{index_all[0]}"]/div/div/div/div[4]/a').click()
+
+                        ms = WebDriverWait(browser, 15).until(
+                            EC.presence_of_element_located((By.CSS_SELECTOR, ".notify-message")))
+                        time.sleep(random.randrange(1,3))
+                        ms.click()
+                        del index_all[0]
+                    except Exception:
+                        del index_all[0]
+
+                    time.sleep(random.randrange(2,4))
+                except Exception:
+                    index_click.clear()
+                    index_all.clear()
+                    self.sleep()
+                if i == 19:
+                    index_click.clear()
+                    index_all.clear()
+                    self.sleep()
+        else:
+            index_click.clear()
+            index_all.clear()
+            self.sleep()
+
+    def like_fb(self):
+        browser = self.browser
+        try:
+            window_after = browser.window_handles[1]
+            browser.switch_to.window(window_after)
+
+            try:
+                element = browser.find_element(By.CSS_SELECTOR, "._15ko._77li.touchable")
+                time.sleep(random.randrange(1,3))
+
+                element.click()
+                time.sleep(random.randrange(2,3))
+                browser.close()
+            except Exception:
+                browser.close()
+        except Exception:
+            return True
